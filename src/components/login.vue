@@ -50,6 +50,7 @@
           if (valid) {
             this.logining = true;
             let loginParams = {
+
               username: this.account.username,
               password: this.account.password
             }
