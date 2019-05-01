@@ -10,7 +10,8 @@ const users = [
     username: 'admin',
     password: '123456',
     email: '123456@qq.com',
-    name: '搬砖者'
+    name: '搬砖者',
+    avatar:'http://www.casmooc.cn/uploadFile/userFile/473379966.jpg'
   },
   {
     id: 2,

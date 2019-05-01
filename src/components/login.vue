@@ -64,7 +64,7 @@
                 // elementui中提示组件
                 this.$message({
                   type: 'success',
-                  message: msg
+                  message: msg  
                 });
                 // 登陆成功，用户信息就保存在sessionStorage中
                 sessionStorage.setItem('user', JSON.stringify(user));
