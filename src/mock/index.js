@@ -41,6 +41,22 @@ export default {
 
     })
 
+    mock.onGet('/user/addUser').reply(config=>{
+      let { name, addr, age, birth, sex } = config.params;
+      _Users.push({
+        name: name,
+        addr: addr,
+        age: age,
+        birth: birth,
+        sex: sex
+      });
+      return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+          resolve([200,{msg:"新增成功"}])
+        },500)
+      })
+    })
+
 
     //获取用户列表（分页）
     mock.onGet('/user/listpage').reply(config => {

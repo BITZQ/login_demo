@@ -9,7 +9,7 @@
           <el-button type="primary" v-on:click="getUsers">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="createVisible=true">新增</el-button>
+          <el-button type="primary" @click="addFormVisible=true">新增</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -68,7 +68,7 @@
       </el-pagination>
     </el-col>
 
-    <el-dialog :visible.sync="createVisible">
+    <el-dialog :visible.sync="addFormVisible">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
         <el-form-item label="姓名" prop="name">
           <el-input v-model="addForm.name" auto-complete="off"></el-input>
@@ -103,7 +103,8 @@
 
 
 <script>
-  import {getUserListPage,deleteUserByBatch} from "../axios/api";
+  import util from '../common/js/util'
+  import {getUserListPage,deleteUserByBatch,addUser} from "../axios/api";
   export default {
       name:"userList",
       data(){
@@ -116,7 +117,7 @@
             filters: {
               name: ''
             },
-            createVisible:false,
+            addFormVisible:false,
             addLoading: false,
             editVisible:false,
             addFormRules: {
@@ -218,7 +219,7 @@
                     message: '提交成功',
                     type: 'success'
                   });
-                  this.$refs['addForm'].resetFields();
+                  this.$refs.addForm.resetFields();
                   this.addFormVisible = false;
                   this.getUsers();
                 });
