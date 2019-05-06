@@ -3,6 +3,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import {Users,LoginUsers} from './data/user'
+import Mock from 'mockjs'
 let _Users = Users;
 
 export default {
@@ -41,9 +42,35 @@ export default {
 
     })
 
+    mock.onGet('/user/updateUser').reply(config=>{
+      let {id,name,addr,age,birth,sex}=config.params;
+      let userLength=_Users.length;
+      for(let i=0;i<userLength;i++){
+        let userItem=_Users[i];
+        if(userItem.id===id){
+          _Users[i]={
+            id:id,
+            name:name,
+            addr:addr,
+            age:age,
+            birth:birth,
+            sex:sex
+          };
+          break;
+        }
+      }
+      return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+          resolve([200,{msg:"更新成功"}])
+        },500)
+      })
+
+    });
+
     mock.onGet('/user/addUser').reply(config=>{
       let { name, addr, age, birth, sex } = config.params;
       _Users.push({
+        id:Mock.Random.guid(),
         name: name,
         addr: addr,
         age: age,

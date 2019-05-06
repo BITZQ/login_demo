@@ -9,7 +9,7 @@
           <el-button type="primary" v-on:click="getUsers">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addFormVisible=true">新增</el-button>
+          <el-button type="primary" @click="handleAdd">新增</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -104,7 +104,7 @@
 
 <script>
   import util from '../common/js/util'
-  import {getUserListPage,deleteUserByBatch,addUser} from "../axios/api";
+  import {getUserListPage,deleteUserByBatch,addUser,editUser} from "../axios/api";
   export default {
       name:"userList",
       data(){
@@ -117,6 +117,7 @@
             filters: {
               name: ''
             },
+            submitType:"foradd",
             addFormVisible:false,
             addLoading: false,
             editVisible:false,
@@ -139,7 +140,6 @@
         formatSex: function (row, column) {
           return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
         },
-        handleAdd:function(){},
         handleDel:function(index,row){
           let ids=row.id;
           this.$confirm('确认删除选中记录吗？', '提示', {
@@ -161,7 +161,25 @@
 
           });
         },
-        handleEdit:function(){},
+        handleAdd:function(){
+          this.addFormVisible=true;
+          if(this.submitType=="foredit"){
+            this.addForm= {
+              name: '',
+              sex: -1,
+              age: 0,
+              birth: '',
+              addr: ''
+            };
+            this.$refs.addForm.resetFields();
+            this.submitType="foradd";
+          }
+        },
+        handleEdit:function(index,row){
+          this.addForm=Object.assign({}, row);
+          this.addFormVisible=true;
+          this.submitType="foredit";
+        },
         handleCurrentChange:function(page){
           this.page=page;
           this.getUsers();
@@ -206,13 +224,24 @@
         },
         addSubmit:function() {
           this.$refs.addForm.validate((valid) => {
+
             if (valid) {
               this.$confirm('确认提交吗？', '提示', {}).then(() => {
+
                 this.addLoading = true;
                 //NProgress.start();
                 let para = Object.assign({}, this.addForm);
                 para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                addUser(para).then((res) => {
+                var actionType=null;
+                if(this.submitType=="foradd"){
+                  //for add
+                  actionType=addUser;
+                }
+                else{
+                  //for edit
+                  actionType=editUser;
+                }
+                actionType(para).then((res) => {
                   this.addLoading = false;
                   //NProgress.done();
                   this.$message({

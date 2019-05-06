@@ -11,3 +11,5 @@ export const getUserListPage = params => { return axios.get(`/user/listpage`,{ p
 export const deleteUserByBatch = params =>{return axios.get('/user/deleteUserByBatch',{ params: params })};
 
 export const addUser = params =>{return axios.get('/user/addUser',{ params: params })};
+
+export const editUser = params =>{return axios.get('/user/updateUser',{params:params})};
